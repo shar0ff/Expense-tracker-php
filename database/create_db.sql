@@ -25,6 +25,7 @@ ALTER TABLE User ADD CONSTRAINT pk_user PRIMARY KEY (user_id);
 -- Categories table
 CREATE TABLE Category (
     category_id SERIAL NOT NULL,
+    user_id BIGINT UNSIGNED NOT NULL,
     category_name VARCHAR(100) NOT NULL,
     category_description VARCHAR(100) NOT NULL,
     type ENUM('income', 'expense') NOT NULL,
@@ -53,3 +54,7 @@ ALTER TABLE Operation
 ALTER TABLE Operation 
     ADD CONSTRAINT fk_operation_category FOREIGN KEY (category_id) 
     REFERENCES Category(category_id) ON DELETE CASCADE;
+
+ALTER TABLE Category 
+    ADD CONSTRAINT fk_category_user FOREIGN KEY (user_id)
+    REFERENCES User(user_id) ON DELETE CASCADE;
