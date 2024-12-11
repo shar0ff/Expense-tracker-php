@@ -1,1 +1,3 @@
-/* Add all @import from ./styles/  */
+@import "general.css";
+@import "forms.css";
+@import "header.css";

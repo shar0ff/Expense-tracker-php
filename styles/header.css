@@ -1,0 +1,114 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Roboto, Arial, sans-serif;
+}
+
+.hidden-checkbox {
+    display: none;
+}
+
+.menu-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(-135deg, rgb(200, 80, 192), rgb(65, 88, 208));
+    clip-path: circle(25px at calc(100% - 45px) 45px);
+    transition: clip-path 0.3s ease-in-out;
+}
+
+#menu-toggle:checked ~ .menu-wrapper {
+    clip-path: circle(75%);
+}
+
+.menu-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(-135deg, rgb(200, 80, 192), rgb(65, 88, 208));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.menu-btn .icon-active {
+    display: none;
+}
+
+.menu-btn:hover .icon-default {
+    display: none;
+}
+
+.menu-btn:hover .icon-active {
+    display: block;
+}
+
+#menu-toggle:checked ~ .menu-btn {
+    background: white;
+    color: rgb(65, 88, 208);
+}
+
+#menu-toggle:checked ~ .menu-btn .icon-default {
+    display: none;
+}
+
+#menu-toggle:checked ~ .menu-btn .icon-active {
+    display: block;
+}
+
+.menu {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.menu ul {
+    list-style: none;
+}
+
+.menu ul li {
+    margin: 15px 0;
+}
+
+.menu ul li a {
+    font-size: 30px;
+    font-weight: 500;
+    color: white;
+    text-decoration: none;
+    padding: 5px 50px;
+    position: relative;
+    transition: color 0.3s ease;
+    line-height: 50px;
+}
+
+.menu ul li a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background: white;
+    border-radius: 25px;
+    z-index: -1;
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+}
+
+.menu ul li a:hover {
+    color: rgb(65, 88, 208);
+}
+
+.menu ul li a:hover::after {
+    transform: scaleY(1);
+}
