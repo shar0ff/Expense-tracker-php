@@ -10,7 +10,7 @@
 
     session_start();
 
-    require './database/database.php';
+    require '../database/database.php';
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST'){
 
@@ -38,9 +38,7 @@
 
         // If there are any errors (either from validation or existing user checks), return them.
         if (!empty($errors)) {
-            http_response_code(400);
-            echo json_encode(["errors" => $errors]);
-            exit;
+            respond_with_errors(400, $errors);
         }
 
         /**
@@ -51,23 +49,19 @@
         $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
         /**
-        * Prepare and execute an INSERT query to add the user to the database.
+        * Handles the user registration process and responds accordingly.
         *
-        * @var PDOStatement $query A prepared statement to insert the new user.
+        * @param PDO $pdo The PDO instance for database operations.
+        * @param string $password_hash The hashed password of the user.
+        * @param string $email The email address of the user.
         */
-        $query = $pdo->prepare("INSERT INTO User (email, password) VALUES (:email, :password)");
-        if ($query->execute([':email' => $email,
-                            ':password' => $password_hash])) {
-            // If the user was successfully registered.
-            echo json_encode(["message" => "User registered successfully."]);
-            exit();
+        if (register_user($pdo, $password_hash, $email)) {
+            respond_with_message("User registered successfully.");
+        } else {
+            // If insertion failed for an unexpected reason, return a 500 error.
+            respond_with_errors(500, ["User registration failed."]);
         }
-
-        // If insertion failed for an unexpected reason, return a 500 error.
-        http_response_code(500);
-        echo json_encode(["errors" => ["User registration failed."]]);
     }
-
     
     /**
     * Trim and sanitize user input.
@@ -127,12 +121,63 @@
     function check_existing_user($pdo, $email) {
         $errors = [];
 
-        $query = $pdo->prepare("SELECT COUNT(*) FROM User WHERE email = :email");
-        $query->execute([':email' => $email]);
-        if ($query->fetchColumn() > 0) {
+        if (user_exists($pdo, 'email', $email)) {
             $errors[] = 'Email already registered.';
         }
-        
+    
         return $errors;
     }    
+
+    /**
+    * Checks if a user exists in the database based on a specified field and value.
+    *
+    * @param PDO $pdo The PDO instance for database operations.
+    * @param string $field The database field to check (e.g., "email").
+    * @param string $value The value to look for in the specified field.
+    *
+    * @return bool Returns true if the user exists, false otherwise.
+    */
+    function user_exists($pdo, $field, $value) {
+        $query = $pdo->prepare("SELECT COUNT(*) FROM User WHERE $field = :field");
+        $query->execute([':field' => $field]);
+        return $query->fetchColumn() > 0;
+    }
+
+    /**
+    * Registers a new user in the database.
+    *
+    * @param PDO $pdo The PDO instance for database operations.
+    * @param string $password_hash The hashed password of the user.
+    * @param string $email The email address of the user.
+    *
+    * @return bool Returns true if the user was successfully registered, false otherwise.
+    */
+    function register_user($pdo, $password_hash, $email) {
+        $query = $pdo->prepare("INSERT INTO User (password, email) VALUES (:password, :email)");
+        return $query->execute([':password' => $password_hash,
+                                ':email' => $email]);
+    }
+
+    /**
+    * Sends an HTTP response with a specified status code and a JSON-encoded array of errors.
+    *
+    * @param int $status_code The HTTP status code to set for the response.
+    * @param array $errors The array of error messages to encode as JSON.
+    */
+    function respond_with_errors($status_code, $errors) {
+        http_response_code($status_code);
+        echo json_encode(["errors" => $errors]);
+        exit;
+    }
+
+    /**
+    * Sends a JSON-encoded success message to the client.
+    *
+    * @param string $message The success message to encode as JSON.
+    */
+    function respond_with_message($message) {
+        echo json_encode(["message" => $message]);
+        exit;
+    }
+
 ?>

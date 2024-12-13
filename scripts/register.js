@@ -1,52 +1,83 @@
 const form = document.querySelector("form");
-
-form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const formData = getFormData();
-    const errorMessage = validateFormData(formData);
-
-    if (errorMessage) {
-        return handleError(errorMessage, "form");
-    } 
-    
-    try {
-        const response = await submitForm(formData);
-        const data = await response.json();
-  
-        if (data.error) {
-          return handleError(data.error, "form");
-        }
-  
-        window.location.href = "login.php";
-    } catch (error) {
-        handleError("An unexpected error occurred.", "form");
-    }
-});
+form.addEventListener("submit", handleFormSubmit);
 
 const password = form.querySelector("input[name='password']");
+password.addEventListener("input", validatePassword);
 
-passwordInput.addEventListener("input", function () {
-    const passwordValue = this.value;
-    const passwordConfirmationValue = document.querySelector("input[name='password-confirmation'").value;
+const passwordConfirmation = document.querySelector("input[name='password-confirmation'");
+passwordConfirmation.addEventListener("input", validatePasswordMatch);
 
-    // Add check password length
+async function handleFormSubmit(e) {
+  e.preventDefault();
+  if (!validateUserInput()) {
+    return handleResult("message", "Invalid input", false);
+  }
 
-    // Add check uppercase letter
+  const formData = getFormData();
+  const errorMessage = validateFormData(formData);
 
-    // Add check lowercase letter
+  if (errorMessage) {
+    return handleResult("message", errorMessage, false);
+  }
 
-    // Add check number
+  try {
+    const response = await submitForm(formData);
+    const data = await response.json();
 
-    // Add check password match
-});
+    if (data.error) {
+      return handleResult("message", data.error, false);
+    }
+
+    if (response.ok) {
+      redirectTo("login.php");
+    }
+  } catch (error) {
+    return handleResult("message", "An unexpected error occurred.", false);
+  }
+}
+
+function validatePassword() {
+  const password = this.value;
+  const requirements = [
+    { message: "Password is too short", isValid: password.length >= 8 },
+    { message: "Password must contain 1 uppercase letter", isValid: /[A-Z]/.test(password) },
+    { message: "Password must contain 1 lowercase letter", isValid: /[a-z]/.test(password) },
+    { message: "Password must contain 1 number", isValid: /\d/.test(password) },
+  ];
+
+  const errorContainer = document.querySelector("input[name='password']").nextElementSibling;
+
+  errorContainer.innerHTML = "";
+
+  const failedRequirements = requirements.filter(req => !req.isValid);
+
+  if (failedRequirements.length) {
+    failedRequirements.forEach(({ message }) => {
+      const error = document.createElement("li");
+      error.textContent = message;
+      errorContainer.appendChild(error);
+    });
+  }
+
+  validatePasswordMatch();
+}
+
+function validatePasswordMatch() {
+  const password = document.querySelector("input[name='password']");
+  const passwordConfirmation = document.querySelector("input[name='password-confirmation']");
+  const matchError = document.querySelector("input[name='password-confirmation']").nextElementSibling;
+
+  if(!(password === passwordConfirmation)) {
+    matchError.textContent = "Passwords do not match"
+  }
+}
 
 function getFormData() {
-    return {
-      email: document.querySelector("input[name='email'").value,
-      password: document.querySelector("input[name='password'").value,
-      passwordConfirmation: document.querySelector("input[name='password-confirmation'").value,
-    };
+  return {
+    email: document.querySelector("input[name='email']").value,
+    password: document.querySelector("input[name='password']").value,
+    passwordConfirmation: document.querySelector("input[name='password-confirmation']").value,
+  };
 }
 
 function validateFormData({ password, passwordConfirmation }) {
@@ -56,7 +87,7 @@ function validateFormData({ password, passwordConfirmation }) {
   
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
     if (!passwordRegex.test(password)) {
-      return "Password must contain at least one uppercase letter, one lowercase letter, and one number.";
+      return "Password must contain 1 uppercase letter, 1 lowercase letter, and 1 number.";
     }
   
     if (password !== passwordConfirmation) {
@@ -67,7 +98,7 @@ function validateFormData({ password, passwordConfirmation }) {
 }
   
 async function submitForm({ email, password }) {
-    return fetch("./authorization/register.php", {
+    return fetch("../authorization/register.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",

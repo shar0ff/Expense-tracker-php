@@ -1,13 +1,11 @@
-<?php
-
-?>
+<?php ?>
 
 <!DOCTYPE html>
 
 <html lang="en">
     <head>
-        <title> Expense Tracker | Sign Up </title>
-        <link rel="stylesheet" href="./styles/index.css">
+        <title> Sign Up | Expense Tracker </title>
+        <link rel="stylesheet" href="../styles/index.css">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>

@@ -6,7 +6,7 @@ form.addEventListener("submit", async (e) => {
     const email = form.querySelector("input[name='email']").value;
     const password = form.querySelector("input[name='password']").value;
   
-    const response = await fetch("./authorization/login.php", {
+    const response = await fetch("../authorization/login.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
