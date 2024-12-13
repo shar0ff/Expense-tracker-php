@@ -1,3 +1,10 @@
+document.addEventListener("DOMContentLoaded", function () {
+  if (isAuthorized()) {
+    window.location.href = "../pages/category-list.php";
+  }
+});
+
+
 const form = document.querySelector("form");
 form.addEventListener("submit", handleFormSubmit);
 

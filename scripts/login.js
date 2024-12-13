@@ -1,3 +1,9 @@
+document.addEventListener("DOMContentLoaded", function () {
+  if (isAuthorized()) {
+    window.location.href = "category-list.php";
+  }
+});
+
 const form = document.querySelector("form");
 
 form.addEventListener("submit", async (e) => {
@@ -18,10 +24,7 @@ form.addEventListener("submit", async (e) => {
     const messageDiv = form.querySelector("span[class='error-message']");
     if (data.error) {
       messageDiv.textContent = data.error;
-    } else {
-      //messageDiv.className = "success-message";
-      //messageDiv.textContent = data.message;
-      document.getElementById("loginForm").reset();
+      return;
     }
   });
   

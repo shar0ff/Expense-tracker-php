@@ -4,15 +4,15 @@
 <html lang="en">
     <head>
         <title>Categories | Expense Tracker</title>
-        <link rel="stylesheet" href="./styles/index.css">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="../styles/index.css">
     </head>
     <body>
-        <div class="wrapper">
+        <?php include 'header.php'; ?>
+        <div class="index-page-container">
             <div class="title">Categories</div>
-            <table class="category-table">
+            <table class="index-table">
                 <thead>
                     <tr>
                         <th>Category Name</th>
@@ -29,6 +29,9 @@
                 <a href="#" class="add-link">Add New Category</a>
             </div>
         </div>
-        <script src="#"></script>
+        <script src="../scripts/category-list.js"></script>
+        <script src="../scripts/common.js"></script>
+        <script src="../scripts/navbar.js"></script>
+        <script src="../scripts/user-service.js"></script>
     </body>
 </html>

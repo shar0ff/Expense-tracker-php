@@ -1,6 +1,6 @@
 <?php 
     session_start();
-    require './database/database.php';
+    require '../database/database.php';
 
     $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
     if ($page < 1) {

@@ -10,6 +10,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
+        <?php include 'header.php'; ?>
         <div class="wrapper">
             <div class="title"> Sign Up  </div>
             <form action="#" method="POST">
@@ -33,10 +34,13 @@
                 </div>
                 <div class="login-link">
                     Already have an account?
-                    <a href="#">  Log in </a>
+                    <a href="../pages/login.php">  Log in </a>
                 </div>
             </form>
         </div>
-        <script src="#"></script>
+        <script src="../scripts/user-service.js"></script>
+        <script src="../scripts/register.js"></script>
+        <script src="../scripts/common.js"></script>
+        <script src="../scripts/navbar.js"></script>
     </body>
 </html>

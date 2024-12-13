@@ -12,6 +12,7 @@
         <link rel="stylesheet" href="../styles/index.css">
     </head>
     <body>
+        <?php include 'header.php'; ?>
         <div class="wrapper">
             <div class="title"> Log In  </div>
             <form action="#" method="POST">
@@ -33,10 +34,13 @@
                 </div>
                 <div class="signup-link">
                     Not a member?
-                    <a href="#">  Sign up now</a>
+                    <a href="../pages/register.php">  Sign up now</a>
                 </div>
             </form>
         </div>
-        <script src="#"></script>
+        <script src="../scripts/user-service.js"></script>
+        <script src="../scripts/login.js"></script>
+        <script src="../scripts/common.js"></script>
+        <script src="../scripts/navbar.js"></script>
     </body>
 </html>

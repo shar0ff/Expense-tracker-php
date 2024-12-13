@@ -12,7 +12,7 @@ async function loadCategories(page = 1) {
 
 // Update the Category table with new data
 function updateCategoryTable(categories) {
-    const tbody = document.querySelector("table[class='category-table'] tbody");
+    const tbody = document.querySelector("table[class='index-table'] tbody");
     tbody.innerHTML = "";
   
     categories.forEach(category => {
